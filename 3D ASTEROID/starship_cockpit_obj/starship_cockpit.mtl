@@ -1,0 +1,83 @@
+# Original starship cockpit material set
+
+newmtl HullDark
+Kd 0.055 0.065 0.078
+Ka 0.012 0.015 0.018
+Ks 0.16 0.18 0.20
+Ns 180
+illum 2
+
+newmtl ArmorGrey
+Kd 0.235 0.255 0.270
+Ka 0.040 0.045 0.050
+Ks 0.28 0.30 0.32
+Ns 230
+illum 2
+
+newmtl TrimMetal
+Kd 0.420 0.440 0.455
+Ka 0.050 0.052 0.055
+Ks 0.48 0.50 0.52
+Ns 320
+illum 2
+
+newmtl PipeBlack
+Kd 0.025 0.030 0.038
+Ka 0.010 0.012 0.016
+Ks 0.25 0.28 0.30
+Ns 150
+illum 2
+
+newmtl FloorSteel
+Kd 0.105 0.120 0.135
+Ka 0.020 0.022 0.024
+Ks 0.27 0.30 0.32
+Ns 180
+illum 2
+
+newmtl SeatFabric
+Kd 0.060 0.070 0.078
+Ka 0.018 0.020 0.022
+Ks 0.055 0.060 0.065
+Ns 24
+illum 2
+
+newmtl CanopyGlass
+Kd 0.045 0.160 0.205
+Ka 0.010 0.035 0.045
+Ks 0.65 0.75 0.80
+Ns 480
+d 0.24
+illum 4
+
+newmtl DisplayCyan
+Kd 0.000 0.48 0.72
+Ka 0.000 0.16 0.24
+Ke 0.000 0.48 0.72
+Ks 0.25 0.65 0.80
+Ns 380
+illum 2
+
+newmtl HudAmber
+Kd 0.93 0.285 0.030
+Ka 0.25 0.050 0.005
+Ke 0.93 0.285 0.030
+Ks 0.80 0.35 0.08
+Ns 240
+illum 2
+
+newmtl IndicatorWhite
+Kd 0.72 0.86 0.95
+Ka 0.16 0.21 0.25
+Ke 0.48 0.66 0.77
+Ks 0.80 0.90 1.00
+Ns 320
+illum 2
+
+newmtl WarningRed
+Kd 0.78 0.035 0.020
+Ka 0.18 0.008 0.004
+Ke 0.54 0.012 0.006
+Ks 0.65 0.12 0.08
+Ns 180
+illum 2
