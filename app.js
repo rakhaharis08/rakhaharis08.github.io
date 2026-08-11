@@ -1,4 +1,6 @@
 import * as THREE from 'https://unpkg.com/three@0.160.1/build/three.module.js';
+import { MTLLoader } from 'https://unpkg.com/three@0.160.1/examples/jsm/loaders/MTLLoader.js';
+import { OBJLoader } from 'https://unpkg.com/three@0.160.1/examples/jsm/loaders/OBJLoader.js';
 
 const canvas = document.querySelector('#space-canvas');
 const scene = new THREE.Scene();
@@ -28,6 +30,14 @@ const cyanGlow = new THREE.MeshBasicMaterial({ color: cyan });
 const pinkGlow = new THREE.MeshBasicMaterial({ color: hotPink });
 const dynamicEffects = [];
 const asteroids = [];
+const asteroidAssetPath = './3D%20ASTEROID/asteroid_assets_obj/';
+const asteroidAssets = [
+  { id: '01', obj: 'asteroid_01_pitted.obj', mtl: 'asteroid_01_pitted.mtl' },
+  { id: '02', obj: 'asteroid_02_elongated.obj', mtl: 'asteroid_02_elongated.mtl' },
+  { id: '03', obj: 'asteroid_03_jagged.obj', mtl: 'asteroid_03_jagged.mtl' },
+  { id: '04', obj: 'asteroid_04_major_crater.obj', mtl: 'asteroid_04_major_crater.mtl' },
+  { id: '05', obj: 'asteroid_05_rubble.obj', mtl: 'asteroid_05_rubble.mtl' }
+];
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const cursor = new THREE.Vector2();
@@ -159,7 +169,7 @@ function createSatellite() {
 }
 
 function setAsteroidScale(asteroid, factor) {
-  asteroid.scale.copy(asteroid.userData.shapeScale).multiplyScalar(factor);
+  asteroid.scale.copy(asteroid.userData.modelScale).multiplyScalar(factor);
 }
 
 function resetAsteroid(asteroid, immediate = false) {
@@ -168,128 +178,67 @@ function resetAsteroid(asteroid, immediate = false) {
   asteroid.rotation.set(random() * Math.PI, random() * Math.PI, random() * Math.PI);
   asteroid.userData.velocity.set((random() - .5) * .035, (random() - .5) * .025, .035 + random() * .07);
   asteroid.userData.spin.set((random() - .5) * .011, (random() - .5) * .013, (random() - .5) * .009);
-  asteroid.userData.baseScale = .35 + random() * .92;
-  asteroid.userData.shapeScale.set(.7 + random() * .7, .64 + random() * .54, .68 + random() * .62);
+  asteroid.userData.baseScale = .42 + random() * .72;
   setAsteroidScale(asteroid, immediate ? asteroid.userData.baseScale : .02);
   asteroid.visible = true;
   asteroid.userData.alive = true;
   asteroid.userData.spawning = immediate ? 1 : 0;
 }
 
-function createAsteroidTexture(seed) {
-  const random = seededRandom(seed);
-  const size = 256;
-  const textureCanvas = document.createElement('canvas');
-  textureCanvas.width = size;
-  textureCanvas.height = size;
-  const context = textureCanvas.getContext('2d');
-  const pixels = context.createImageData(size, size);
-  for (let pixel = 0; pixel < pixels.data.length; pixel += 4) {
-    const grain = 104 + Math.floor(random() * 44) + Math.floor(random() * 16);
-    pixels.data[pixel] = grain + 7;
-    pixels.data[pixel + 1] = grain + 4;
-    pixels.data[pixel + 2] = grain - 4;
-    pixels.data[pixel + 3] = 255;
-  }
-  context.putImageData(pixels, 0, 0);
-  for (let crater = 0; crater < 140; crater++) {
-    const x = random() * size;
-    const y = random() * size;
-    const radius = 1.2 + Math.pow(random(), 2.3) * 16;
-    const gradient = context.createRadialGradient(x, y, 0, x, y, radius);
-    gradient.addColorStop(0, 'rgba(20, 19, 17, .78)');
-    gradient.addColorStop(.43, 'rgba(52, 49, 44, .44)');
-    gradient.addColorStop(.67, 'rgba(211, 203, 187, .34)');
-    gradient.addColorStop(.79, 'rgba(116, 110, 100, .15)');
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    context.fillStyle = gradient;
-    context.beginPath();
-    context.ellipse(x, y, radius, radius * (.64 + random() * .33), random() * Math.PI, 0, Math.PI * 2);
-    context.fill();
-  }
-  const texture = new THREE.CanvasTexture(textureCanvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
-  return texture;
-}
-
-function createAsteroidGeometry(seed) {
-  const random = seededRandom(seed);
-  const geometry = new THREE.SphereGeometry(1, 48, 32);
-  const positions = geometry.attributes.position;
-  const point = new THREE.Vector3();
-  const surface = new THREE.Vector3();
-  const craters = Array.from({ length: 15 + Math.floor(random() * 7) }, () => {
-    const z = random() * 2 - 1;
-    const angle = random() * Math.PI * 2;
-    const horizontal = Math.sqrt(1 - z * z);
-    return {
-      direction: new THREE.Vector3(horizontal * Math.cos(angle), z, horizontal * Math.sin(angle)),
-      radius: .045 + Math.pow(random(), 1.65) * .25,
-      depth: .025 + Math.pow(random(), 1.7) * .16
-    };
+function loadMtl(filename) {
+  return new Promise((resolve, reject) => {
+    new MTLLoader().setPath(asteroidAssetPath).load(filename, resolve, undefined, reject);
   });
-
-  for (let index = 0; index < positions.count; index++) {
-    point.fromBufferAttribute(positions, index);
-    surface.copy(point).normalize();
-    let radius = 1
-      + Math.sin(surface.x * 7.7 + surface.y * 3.9) * .11
-      + Math.cos(surface.z * 9.2 - surface.x * 4.1) * .085
-      + Math.sin(surface.x * 20.8 + surface.z * 14.1) * .042
-      + Math.cos(surface.y * 19.7 - surface.z * 15.4) * .032;
-
-    craters.forEach(crater => {
-      const alignment = surface.dot(crater.direction);
-      const edge = Math.cos(crater.radius);
-      if (alignment > edge) {
-        const inside = (alignment - edge) / (1 - edge);
-        radius -= crater.depth * Math.pow(inside, 1.45);
-        radius += crater.depth * .24 * Math.exp(-Math.pow((inside - .22) * 8.5, 2));
-      }
-    });
-    point.copy(surface).multiplyScalar(radius);
-    positions.setXYZ(index, point.x, point.y, point.z);
-  }
-  geometry.computeVertexNormals();
-  geometry.computeBoundingSphere();
-  return geometry;
 }
 
-// Procedural interactive assets: cratered, high-detail rock geometry with individual hit states.
-function createAsteroidField() {
-  const random = seededRandom(1961);
-  for (let i = 0; i < 18; i++) {
-    const geometry = createAsteroidGeometry(400 + i * 97);
-    const surfaceTexture = createAsteroidTexture(700 + i * 101);
-    const material = new THREE.MeshStandardMaterial({
-      color: new THREE.Color().setHSL(.09, .075, .74 + random() * .08),
-      map: surfaceTexture,
-      bumpMap: surfaceTexture,
-      bumpScale: .18,
-      roughness: .98,
-      metalness: .02
-    });
-    const asteroid = new THREE.Mesh(geometry, material);
-    asteroid.userData = { asteroid: true, id: String(i + 1).padStart(2, '0'), alive: true, spawning: 1, baseScale: .6, velocity: new THREE.Vector3(), spin: new THREE.Vector3(), shapeScale: new THREE.Vector3() };
-    asteroid.position.set((random() - .5) * 11, (random() - .45) * 6.4, -10 - random() * 13);
-    asteroid.rotation.set(random() * Math.PI, random() * Math.PI, random() * Math.PI);
-    asteroid.userData.velocity.set((random() - .5) * .035, (random() - .5) * .025, .035 + random() * .07);
-    asteroid.userData.spin.set((random() - .5) * .011, (random() - .5) * .013, (random() - .5) * .009);
-    asteroid.userData.baseScale = .35 + random() * .92;
-    asteroid.userData.shapeScale.set(.7 + random() * .7, .64 + random() * .54, .68 + random() * .62);
-    setAsteroidScale(asteroid, asteroid.userData.baseScale);
-    deepSpace.add(asteroid);
-    asteroids.push(asteroid);
-  }
+function loadObj(filename, materials) {
+  return new Promise((resolve, reject) => {
+    new OBJLoader().setPath(asteroidAssetPath).setMaterials(materials).load(filename, resolve, undefined, reject);
+  });
+}
+
+async function createAsteroid(asset) {
+  const materials = await loadMtl(asset.mtl);
+  materials.preload();
+  const asteroid = await loadObj(asset.obj, materials);
+  const bounds = new THREE.Box3().setFromObject(asteroid);
+  const modelSize = bounds.getSize(new THREE.Vector3());
+  const normalizeScale = 2 / Math.max(modelSize.x, modelSize.y, modelSize.z);
+
+  asteroid.traverse(node => {
+    if (!node.isMesh) return;
+    node.castShadow = true;
+    node.receiveShadow = true;
+    node.userData.asteroidRoot = asteroid;
+  });
+  asteroid.userData = {
+    asteroid: true,
+    id: asset.id,
+    alive: true,
+    spawning: 1,
+    baseScale: .6,
+    velocity: new THREE.Vector3(),
+    spin: new THREE.Vector3(),
+    modelScale: new THREE.Vector3(normalizeScale, normalizeScale, normalizeScale)
+  };
+  resetAsteroid(asteroid, true);
+  deepSpace.add(asteroid);
+  asteroids.push(asteroid);
+}
+
+// Five supplied OBJ models retain their distinct cratered and rocky silhouettes.
+async function createAsteroidField() {
+  const results = await Promise.allSettled(asteroidAssets.map(createAsteroid));
+  const failed = results.filter(result => result.status === 'rejected').length;
+  if (failed) console.error(`Unable to load ${failed} asteroid model(s).`);
+  announce(failed ? 'ASTEROID SCAN // PARTIAL MODEL LOAD' : 'TARGETING SYSTEM ONLINE // 5 ASTEROIDS IN RANGE');
 }
 
 const cockpitParts = createCockpit();
 const stars = createStars();
 const planet = createPlanet();
 const satellite = createSatellite();
-createAsteroidField();
+void createAsteroidField();
 
 scene.add(new THREE.HemisphereLight(0xc7e4ff, 0x01040a, 1.55));
 const asteroidLight = new THREE.DirectionalLight(0xffffff, 2.65); asteroidLight.position.set(-4, 7, 6); scene.add(asteroidLight);
@@ -319,8 +268,8 @@ function pointFromScreen(clientX, clientY) {
 function findAsteroid(clientX, clientY) {
   pointFromScreen(clientX, clientY);
   const targets = asteroids.filter(asteroid => asteroid.userData.alive);
-  const directHit = raycaster.intersectObjects(targets, false)[0];
-  if (directHit) return directHit;
+  const directHit = raycaster.intersectObjects(targets, true)[0];
+  if (directHit) return { ...directHit, object: directHit.object.userData.asteroidRoot };
 
   // Add a small targeting-assist radius so a visible low-poly rock remains
   // easy to hit even when its jagged silhouette leaves narrow gaps.

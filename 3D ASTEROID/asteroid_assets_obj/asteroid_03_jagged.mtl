@@ -1,0 +1,7 @@
+# Material for Asteroid 03 Jagged
+newmtl AsteroidStone
+Kd 0.25 0.245 0.228
+Ka 0.035 0.035 0.035
+Ks 0.025 0.025 0.025
+Ns 12
+illum 2

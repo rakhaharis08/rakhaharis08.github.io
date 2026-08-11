@@ -19,7 +19,14 @@ const mime = {
 createServer((request, response) => {
   const requested = request.url?.split('?')[0] || '/';
   const relative = requested === '/' ? 'index.html' : requested.replace(/^\/+/, '');
-  const filename = normalize(join(root, relative));
+  let filename;
+  try {
+    filename = normalize(join(root, decodeURIComponent(relative)));
+  } catch {
+    response.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    response.end('Bad request');
+    return;
+  }
 
   if (!filename.startsWith(root) || !existsSync(filename)) {
     response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
