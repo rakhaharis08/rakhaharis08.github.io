@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#02060d" />
+    <meta name="description" content="Rakha Haris - Backend and Data Engineer." />
+    <title>Rakha Haris | Starship Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <canvas id="space-canvas" aria-label="Interactive starship cockpit. Click an asteroid to fire."></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="crosshair" id="crosshair" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
+    <div class="impact-flash" id="impact-flash" aria-hidden="true"></div>
+    <output class="target-toast" id="target-toast" aria-live="polite">TARGETING SYSTEM ONLINE</output>
+
+    <header class="command-bar">
+      <a class="ship-id" href="#bridge" aria-label="Return to bridge">
+        <span class="ship-mark"><i></i><i></i><i></i></span>
+        <span>RH-0801 <b>STARSHIP</b></span>
+      </a>
+      <div class="command-center"><span class="command-dot"></span><span>DEEP SPACE / SECTOR 08</span></div>
+      <nav aria-label="Primary navigation">
+        <a href="#profile">PROFILE</a>
+        <a href="#missions">LOG</a>
+        <a href="#projects">PROJECTS</a>
+        <a href="#systems">SYSTEMS</a>
+        <a href="#contact">COMMS</a>
+      </nav>
+      <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false"><span class="bars"><i></i><i></i><i></i><i></i></span> HUM: OFF</button>
+    </header>
+
+    <main>
+      <section class="bridge section" id="bridge">
+        <div class="bridge-copy entry">
+          <p class="eyebrow"><span class="live-dot"></span> FLIGHT DECK / ENGINEERING WING</p>
+          <h1>Systems built<br />for the <em>unknown.</em></h1>
+          <p class="intro">I’m Rakha Haris - Backend and Data Engineer. I turn complex data, services, and operational needs into clear systems that stay reliable under pressure.</p>
+          <div class="actions"><a class="primary-button" href="#profile">BOARD THE SHIP <span>↓</span></a><button class="fire-button" id="fire-button" type="button">FIRE AT ASTEROID <span>⌖</span></button></div>
+        </div>
+        <aside class="targeting-card entry" style="--delay:.18s">
+          <div class="card-top"><span>WEAPON CONSOLE</span><b><i></i> ARMED</b></div>
+          <div class="radar"><div class="radar-sweep"></div><span class="radar-core"></span><i class="blip one"></i><i class="blip two"></i><i class="blip three"></i></div>
+          <div class="targeting-copy"><strong id="target-name">ASTEROID FIELD</strong><span id="target-distance">SCANNING: CLICK A ROCK</span></div>
+          <div class="card-footer"><span>HITS <b id="hit-count">000</b></span><span>REACTOR <b>98%</b></span><span>AMMO <b>∞</b></span></div>
+        </aside>
+        <div class="deck-instruction entry" style="--delay:.32s"><span>01</span><p>MOVE CURSOR THROUGH THE VIEWPORT<br /><b>CLICK AN ASTEROID TO FIRE</b></p></div>
+        <a class="scroll-guide" href="#profile"><i></i> EXPLORE SHIP RECORDS</a>
+      </section>
+
+      <section class="section profile" id="profile">
+        <div class="section-marker"><span>02</span><i></i> CREW PROFILE</div>
+        <div class="console-layout">
+          <article class="console-panel profile-intro reveal">
+            <p class="eyebrow">CREW MEMBER / 08</p>
+            <h2>Engineer by craft.<br /><em>Explorer by nature.</em></h2>
+            <p>I design data-intensive systems with clarity at their core - from service APIs and real-time monitoring to resilient data pipelines.</p>
+            <p>Currently operating as a <strong>Data Engineer at SMBC Indonesia</strong>, connecting raw data to secure, high-performance operations and better decisions.</p>
+          </article>
+          <aside class="console-panel crew-stats reveal" style="--delay:.12s">
+            <div class="stat-head"><span>PERSONNEL DATA</span><b>VERIFIED</b></div>
+            <div class="stat"><strong>04<span>+</span></strong><p>YEARS BUILDING<br />PRODUCTION SYSTEMS</p></div>
+            <div class="stat"><strong>3.53</strong><p>GPA / CUM LAUDE<br />POLITEKNIK NEGERI JAKARTA</p></div>
+            <div class="stat"><strong>24<span>/7</span></strong><p>RELIABILITY<br />MINDSET</p></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section missions" id="missions">
+        <div class="section-marker"><span>03</span><i></i> FLIGHT LOG</div>
+        <div class="mission-header reveal"><p class="eyebrow">CAREER TRAJECTORY</p><h2>Selected <em>missions.</em></h2><p>Every stop taught a new way for people, data, and systems to move together.</p></div>
+        <div class="mission-log">
+          <article class="mission-row reveal" data-orbit="0"><div class="mission-index">M-01</div><div class="mission-period">2024 - PRESENT</div><div><p class="role">DATA ENGINEER</p><h3>Bank SMBC Indonesia</h3><p>Build scalable data pipelines and infrastructure for monitoring, reporting, analytics, and secure enterprise operations.</p></div><div class="tag-list"><span>PIPELINES</span><span>ANALYTICS</span><span>ORACLE</span></div></article>
+          <article class="mission-row reveal" data-orbit="1"><div class="mission-index">M-02</div><div class="mission-period">2023 - 2024</div><div><p class="role">BACKEND ENGINEER</p><h3>Visi Teliti Saksama</h3><p>Designed a CMS and real-time news platform with reliable management flows, technical efficiency, and an engaging experience.</p></div><div class="tag-list"><span>CMS</span><span>REAL-TIME</span><span>APIs</span></div></article>
+          <article class="mission-row reveal" data-orbit="2"><div class="mission-index">M-03</div><div class="mission-period">OCT 2022 - APR 2023</div><div><p class="role">WEB DEVELOPER INTERN</p><h3>Bank Rakyat Indonesia</h3><p>Developed a platform for real-time monitoring and analysis of EDC transaction data across Indonesia.</p></div><div class="tag-list"><span>NODE.JS</span><span>MONITORING</span><span>EDC</span></div></article>
+          <article class="mission-row reveal" data-orbit="3"><div class="mission-index">M-04</div><div class="mission-period">2019</div><div><p class="role">BACKEND DEVELOPER INTERN</p><h3>AstraGraphia TBK</h3><p>Created a web monitoring system that brought visibility to product-manufacturing progress in real time.</p></div><div class="tag-list"><span>NODE.JS</span><span>WEB</span><span>TRACKING</span></div></article>
+        </div>
+      </section>
+
+      <section class="section projects" id="projects">
+        <div class="section-marker"><span>04</span><i></i> PROJECT ARCHIVE</div>
+        <div class="project-heading reveal"><p class="eyebrow">SELECTED BUILDS / 03</p><h2>Products in<br /><em>active orbit.</em></h2><p>A compact archive of live platforms, mobile services, and private builds shaped for real users.</p></div>
+        <div class="project-layout">
+          <article class="project-visual reveal" style="--delay:.08s">
+            <div class="visual-topline"><span>REKBERIN // PRODUCT CAPTURE</span><span><i></i> MVP</span></div>
+            <figure><img src="./assets/rekberin-landing.png" alt="Rekberin landing page showing an escrow payment deal preview" /><figcaption><span>01 / LANDING &amp; DEAL PREVIEW</span><span class="project-closed">CLOSED PROJECT // NO PUBLIC LINK</span></figcaption></figure>
+            <div class="visual-callout left"><span>01</span><p>QRIS / VA<br /><b>PAYMENT FLOW</b></p></div>
+            <div class="visual-callout right"><span>02</span><p>ESCROW<br /><b>FUNDS HELD</b></p></div>
+          </article>
+          <aside class="project-documentation reveal" style="--delay:.16s">
+            <div class="documentation-head"><span>PROJECT DOCUMENTATION</span><b>2026</b></div>
+            <div class="documentation-intro"><p>FINTECH / DIGITAL ESCROW</p><h3>Deal aman,<br />tanpa ribet.</h3><span>PRE-SEED MVP</span></div>
+            <dl class="documentation-list">
+              <div><dt>THE PROBLEM</dt><dd>Peer-to-peer transactions lack a neutral, trusted layer that protects both payment and delivery.</dd></div>
+              <div><dt>THE MECHANISM</dt><dd>Funds are held in escrow until the buyer confirms delivery, the inspection window ends, or a dispute is resolved.</dd></div>
+              <div><dt>CORE FLOWS</dt><dd>OTP onboarding, deal links, QRIS / Virtual Account payments, inspection timer, disputes, KYC payout, and admin reconciliation.</dd></div>
+            </dl>
+            <div class="project-stack"><span>NEXT.JS</span><span>GO / CHI</span><span>POSTGRESQL</span><span>DOCKER</span></div>
+          </aside>
+        </div>
+        <div class="architecture-log reveal" style="--delay:.2s">
+          <div class="architecture-label"><span>SECURITY &amp; DATA NOTES</span><b>DOCUMENTED</b></div>
+          <div class="architecture-steps"><div><span>01</span><strong>ENCRYPT</strong><p>Seller bank-account data uses AES-256-GCM before storage.</p></div><i></i><div><span>02</span><strong>TRACK</strong><p>An immutable financial ledger records payment, payout, and refund events.</p></div><i></i><div><span>03</span><strong>CONTROL</strong><p>HttpOnly sessions, rate limits, audit logs, and role-based dashboards protect the flow.</p></div></div>
+          <p class="document-source">SOURCE: REKBERIN PITCH DECK 2026 + PRODUCT SOURCE REVIEW</p>
+        </div>
+        <div class="more-projects">
+          <article class="orbit-project-card reveal" style="--delay:.08s">
+            <a class="project-shot" href="https://dev.nusabin.com/" target="_blank" rel="noopener noreferrer" aria-label="Open NusaBin website">
+              <img src="./assets/nusabin-live.png" alt="NusaBin live website home screen" />
+              <span>LIVE SIGNAL &#8599;</span>
+            </a>
+            <div class="orbit-project-info">
+              <div class="orbit-project-meta"><span>02 // LIVE WEB</span><b>ONLINE</b></div>
+              <h3>NusaBin.</h3>
+              <p>Frontend delivery for Nusabin's public digital experience, bringing its technology, services, locations, and ecosystem into one visual launch point.</p>
+              <div class="orbit-tags"><span>REACT.JS</span><span>FRONTEND ENGINEERING</span><span>LIVE PLATFORM</span></div>
+              <a class="project-external" href="https://dev.nusabin.com/" target="_blank" rel="noopener noreferrer">OPEN DEV.NUSABIN.COM <span>&#8599;</span></a>
+            </div>
+          </article>
+          <article class="orbit-project-card reveal" style="--delay:.16s">
+            <a class="project-shot" href="https://play.google.com/store/apps/details?id=com.mandiri.dpbm" target="_blank" rel="noopener noreferrer" aria-label="Open DPBM Mobile on Google Play">
+              <img src="./assets/dpbm-google-play.png" alt="DPBM Mobile product page on Google Play" />
+              <span>MOBILE DEPLOYMENT &#8599;</span>
+            </a>
+            <div class="orbit-project-info">
+              <div class="orbit-project-meta"><span>03 // MOBILE SERVICE</span><b>IOS + ANDROID</b></div>
+              <h3>DPBM Online.</h3>
+              <p>Backend development for Dana Pensiun Bank Mandiri's mobile member service, supporting authentication, pension-balance information, and claim access.</p>
+              <div class="orbit-tags"><span>GOLANG</span><span>ECHO FRAMEWORK</span><span>BACKEND API</span></div>
+              <div class="store-links">
+                <a class="project-external" href="https://apps.apple.com/id/app/dpbm-online/id1660228045" target="_blank" rel="noopener noreferrer">APP STORE <span>&#8599;</span></a>
+                <a class="project-external" href="https://play.google.com/store/apps/details?id=com.mandiri.dpbm" target="_blank" rel="noopener noreferrer">GOOGLE PLAY <span>&#8599;</span></a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section systems" id="systems">
+        <div class="section-marker"><span>05</span><i></i> SHIP SYSTEMS</div>
+        <div class="system-title reveal"><p class="eyebrow">TECHNICAL CONSTELLATION</p><h2>Tooling for every<br /><em>launch sequence.</em></h2></div>
+        <div class="system-deck reveal" style="--delay:.1s">
+          <div class="engine-core"><span>CORE</span><strong>BACKEND<br />/ DATA</strong><i></i></div>
+          <div class="skill-grid"><span class="core">Node.js</span><span class="core">Data Pipelines</span><span>Airflow</span><span class="core">PostgreSQL</span><span>Laravel</span><span>REST APIs</span><span>Oracle</span><span>React</span><span>MySQL</span><span class="core">Python</span><span>MongoDB</span><span>Java</span><span>Spring Boot</span><span>SQL Server</span><span>Gin</span><span>C++</span></div>
+          <div class="system-readout"><div><span>PRIMARY</span><strong>RELIABLE<br />SERVICES</strong></div><div><span>INTERFACE</span><strong>REST / EVENT<br />DRIVEN</strong></div><div><span>FOCUS</span><strong>STRUCTURED<br />COMPLEXITY</strong></div></div>
+        </div>
+      </section>
+
+      <section class="section credentials">
+        <div class="section-marker"><span>06</span><i></i> ARCHIVES</div>
+        <div class="archive-grid">
+          <article class="archive-card reveal"><span class="archive-code">EDU-01</span><p class="eyebrow">2019 - 2023</p><h3>Politeknik Negeri Jakarta</h3><p>Informatics Engineering &amp; Computer Science</p><b>GPA 3.53 / CUM LAUDE</b></article>
+          <article class="archive-card awards reveal" style="--delay:.12s"><span class="archive-code">AWD-02</span><p class="eyebrow">DISTINCTIONS</p><h3>Signals worth remembering.</h3><ul><li>First Winner, Game Creation Clevio - 2019</li><li>Favorite Winner, Game Creation Clevio - 2019</li><li>First Winner, Web Developing UHAMKA - 2020</li><li>Best Project, TIK Majoring - 2022</li></ul></article>
+        </div>
+      </section>
+
+      <section class="section contact" id="contact">
+        <div class="contact-console reveal"><p class="eyebrow"><span class="live-dot"></span> COMMUNICATION CHANNEL OPEN</p><h2>Let’s build the<br /><em>next signal.</em></h2><p>Have a system that needs to travel further? I’m always glad to talk about the next challenge.</p><a class="primary-button mail" href="mailto:rakhaharis080102@gmail.com">TRANSMIT MESSAGE <span>↗</span></a><div class="contact-data"><span>DEPOK, JAWA BARAT, INDONESIA</span><a href="tel:+6285155146922">+62 851 5514 6922</a></div></div>
+      </section>
+    </main>
+    <footer><span>RAKHA HARIS // RH-0801</span><span>STARSHIP PORTFOLIO</span><a href="#bridge">RETURN TO BRIDGE ↑</a></footer>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
